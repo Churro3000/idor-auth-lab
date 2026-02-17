@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IDOR & Authorization Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Login screen -->
+  <div id="login" class="container">
+    <h1>Login to Dashboard</h1>
+    <form id="loginForm">
+      <select id="userSelect">
+        <option value="1">alice (user)</option>
+        <option value="2">bob (user)</option>
+        <option value="3">charlie (user)</option>
+        <option value="999">admin (god mode)</option>
+      </select>
+      <button type="submit">Login as selected user</button>
+    </form>
+    <p class="hint">
+      Hint: IDs are predictable (1,2,3...) and stored in localStorage.<br>
+      Try changing your user ID after login...
+    </p>
+  </div>
+
+  <!-- Dashboard (hidden at first) -->
+  <div id="dashboard" class="container hidden">
+    <header>
+      <h1>Welcome, <span id="username"></span></h1>
+      <button id="logout">Logout</button>
+    </header>
+
+    <div class="profile-card">
+      <h2>Your Private Profile</h2>
+      <p><strong>User ID:</strong> <span id="userId"></span></p>
+      <p><strong>Full Name:</strong> <span id="fullName"></span></p>
+      <p><strong>Email:</strong> <span id="email"></span></p>
+      <p><strong>Balance:</strong> $<span id="balance"></span></p>
+      <p><strong>Secret Note (admin only):</strong> <span id="secret"></span></p>
+    </div>
+
+    <div class="exploit-hint">
+      <h3>How to exploit IDOR right now</h3>
+      <ol>
+        <li>Open DevTools (F12) → Application tab → Local Storage</li>
+        <li>Change the value of <code>userId</code> to 999 or another number</li>
+        <li>Refresh the page</li>
+        <li>You now see another user's private data!</li>
+      </ol>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
