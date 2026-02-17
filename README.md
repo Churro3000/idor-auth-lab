@@ -16,7 +16,7 @@ This static web app simulates a multi-user dashboard with private profiles. It d
 
 The app uses client-side JS to "authenticate" and load data. In real apps, this would be server-side — here it's simulated to show the risks.
 
-Live demo: https://YOUR-USERNAME.github.io/idor-auth-lab/ (replace YOUR-USERNAME with your GitHub username)
+Live demo: https://churro3000.github.io/idor-auth-lab/
 
 ## Prerequisites
 
@@ -52,7 +52,7 @@ This section shows how to exploit IDOR and broken authorization. We'll use brows
 
 4. Go to the "Application" tab (in Chrome) or "Storage" tab (in Firefox).
 
-5. Expand "Local Storage" → click on your site's domain (e.g., https://yourusername.github.io).
+5. Expand "Local Storage" → click on your site's domain (e.g., https://churro3000.github.io/idor-auth-lab/).
 
 6. You'll see a key-value pair: userId with value "1".
 
