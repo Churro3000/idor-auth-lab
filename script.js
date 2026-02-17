@@ -36,8 +36,11 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
   
   const selectedId = document.getElementById("userSelect").value;
   
-  // Store user ID in localStorage (very insecure!)
+  // Store user ID in localStorage (still insecure – for demo only)
   localStorage.setItem("userId", selectedId);
+  
+  // NEW: Store original ID for tamper detection (client-side simulation)
+  localStorage.setItem("originalUserId", selectedId);
   
   // Hide login, show dashboard
   document.getElementById("login").classList.add("hidden");
@@ -46,11 +49,35 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
   loadDashboard();
 });
 
-// Load dashboard based on stored userId
+// Load dashboard based on stored userId – now with validation
 function loadDashboard() {
   const userId = localStorage.getItem("userId");
-  const user = users[userId] || users["1"]; // fallback to alice if invalid
+  const originalId = localStorage.getItem("originalUserId");
 
+  // FIX 1: Reject if no ID or ID not in database
+  if (!userId || !users[userId]) {
+    alert("Invalid or unauthorized user ID – logging out");
+    logout();
+    return;
+  }
+
+  // FIX 2: Prevent tampering – check if userId matches original login ID
+  if (userId !== originalId) {
+    alert("Authorization failed – user ID was tampered with!");
+    logout();
+    return;
+  }
+
+  // FIX 3: Extra check for vertical escalation (admin access only allowed if originally selected)
+  if (userId === "999" && originalId !== "999") {
+    alert("Admin access denied – unauthorized privilege escalation attempt");
+    logout();
+    return;
+  }
+
+  const user = users[userId];
+
+  // Load user data safely
   document.getElementById("username").textContent = user.username;
   document.getElementById("userId").textContent = userId;
   document.getElementById("fullName").textContent = user.fullName;
@@ -59,14 +86,20 @@ function loadDashboard() {
   document.getElementById("secret").textContent = user.secret;
 }
 
-// Logout
+// Logout – clear all stored data
 document.getElementById("logout").addEventListener("click", () => {
-  localStorage.removeItem("userId");
-  document.getElementById("dashboard").classList.add("hidden");
-  document.getElementById("login").classList.remove("hidden");
+  logout();
 });
 
-// Auto-load if already "logged in"
+// Helper function to clean up and reset
+function logout() {
+  localStorage.removeItem("userId");
+  localStorage.removeItem("originalUserId");
+  document.getElementById("dashboard").classList.add("hidden");
+  document.getElementById("login").classList.remove("hidden");
+}
+
+// Auto-load if already "logged in" – but still validate
 if (localStorage.getItem("userId")) {
   document.getElementById("login").classList.add("hidden");
   document.getElementById("dashboard").classList.remove("hidden");
