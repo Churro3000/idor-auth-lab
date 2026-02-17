@@ -93,3 +93,44 @@ This section shows how to exploit IDOR and broken authorization. We'll use brows
 * Impact: Data leakage, account takeover, privilege escalation.
 
 * Try on mobile: Use browser inspect tools or apps like Eruda for DevTools on phone.
+
+
+## How to Fix the Vulnerabilities (The Patch)
+
+This section shows how to secure the app against IDOR and broken authorization. We'll start with client-side fixes (for learning/demo), then explain the real-world server-side solution.
+
+### Client-Side Fix (Simulation – Not Production-Grade)
+
+1. **Add ID validation before loading data**  
+   Open `script.js` and update the `loadDashboard()` function:
+
+   ```javascript
+   function loadDashboard() {
+     const userId = localStorage.getItem("userId");
+
+     // Prevent invalid or missing IDs
+     if (!userId || !users[userId]) {
+       alert("Invalid or unauthorized user ID – logging out");
+       localStorage.removeItem("userId");
+       window.location.reload();
+       return;
+     }
+
+     const user = users[userId];
+
+     // Optional: restrict admin access (demo only)
+     if (userId === "999" && userId !== localStorage.getItem("originalUserId")) {
+       alert("Admin access denied – unauthorized elevation attempt");
+       localStorage.removeItem("userId");
+       window.location.reload();
+       return;
+     }
+
+     // Load user data safely
+     document.getElementById("username").textContent = user.username;
+     document.getElementById("userId").textContent = userId;
+     document.getElementById("fullName").textContent = user.fullName;
+     document.getElementById("email").textContent = user.email;
+     document.getElementById("balance").textContent = user.balance;
+     document.getElementById("secret").textContent = user.secret;
+   }
