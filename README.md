@@ -135,8 +135,8 @@ This section shows how to secure the app against IDOR and broken authorization. 
      document.getElementById("secret").textContent = user.secret;
    }
 
-   ### Testing the Client-Side Fix
 
+### Testing the Client-Side Fix
 1. Apply the updated code to script.js and refresh the site.
 2. Log in as alice (ID 1) – dashboard loads normally with Alice's data.
 3. Open DevTools (F12) → Application → Local Storage → change userId from "1" to "2" → press Enter.
