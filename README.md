@@ -134,3 +134,12 @@ This section shows how to secure the app against IDOR and broken authorization. 
      document.getElementById("balance").textContent = user.balance;
      document.getElementById("secret").textContent = user.secret;
    }
+
+   ### Testing the Client-Side Fix
+
+1. Apply the updated code to script.js and refresh the site.
+2. Log in as alice (ID 1) – dashboard loads normally with Alice's data.
+3. Open DevTools (F12) → Application → Local Storage → change userId from "1" to "2" → press Enter.
+4. Refresh the page (F5) – an alert appears: "Invalid or unauthorized user ID – logging out" → automatically logs out to login screen.
+5. Repeat for admin: Change userId to "999" → refresh → alert: "Admin access denied – unauthorized elevation attempt" → logs out.
+6. Note: If you change userId before refresh, the mismatch detection triggers the alert. This simulates basic protection against tampering.
